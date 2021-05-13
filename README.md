@@ -7,3 +7,6 @@ Raytracing playground based on [Computer graphics from scratch](https://gabrielg
 # Diffuse reflection
 
 ![Diffuse reflection adds a sense of depth and volume to the scene.](img/diffuse_reflection.png "Diffuse reflection adds a sense of depth and volume to the scene.")
+
+# Specular reflection
+![The scene rendered with ambient, diffuse, and specular reflection. Not only do we get a sense of depth and volume, but each surface also has a slightly different appearance.](img/specular_reflection.png "The scene rendered with ambient, diffuse, and specular reflection. Not only do we get a sense of depth and volume, but each surface also has a slightly different appearance.")
