@@ -2,4 +2,8 @@ Raytracing playground based on [Computer graphics from scratch](https://gabrielg
 
 # Basic Raytracing
 
-![An incredibly awesome raytraced scene](img/basic_raytracing.png "An incredibly awesome raytraced scene")
+![An incredibly awesome raytraced scene.](img/basic_raytracing.png "An incredibly awesome raytraced scene.")
+
+# Diffuse reflection
+
+![Diffuse reflection adds a sense of depth and volume to the scene.](img/diffuse_reflection.png "Diffuse reflection adds a sense of depth and volume to the scene.")
