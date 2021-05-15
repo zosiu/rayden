@@ -35,7 +35,7 @@ auto main() -> int {
 
   ShaderProgram quad_shader = ShaderProgram({std::make_pair(ShaderType::Vertex, "shaders/texture.vert.glsl"),
                                              std::make_pair(ShaderType::Fragment, "shaders/texture.frag.glsl")});
-  ShaderProgram compute_shader = ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/shadows.cmpt.glsl")});
+  ShaderProgram compute_shader = ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/reflections.cmpt.glsl")});
   Texture2D texture = Texture2D(SCR_SIZE_W, SCR_SIZE_H);
   FullScreenQuad quad;
 

@@ -14,3 +14,7 @@ Raytracing playground based on [Computer graphics from scratch](https://gabrielg
 # Shadows
 
 ![A raytraced scene, now with shadows.](img/shadows.png "A raytraced scene, now with shadows")
+
+# Reflections
+
+![The raytraced scene, now with reflections.](img/reflections.png "The raytraced scene, now with reflections.")
