@@ -10,3 +10,7 @@ Raytracing playground based on [Computer graphics from scratch](https://gabrielg
 
 # Specular reflection
 ![The scene rendered with ambient, diffuse, and specular reflection. Not only do we get a sense of depth and volume, but each surface also has a slightly different appearance.](img/specular_reflection.png "The scene rendered with ambient, diffuse, and specular reflection. Not only do we get a sense of depth and volume, but each surface also has a slightly different appearance.")
+
+# Shadows
+
+![A raytraced scene, now with shadows.](img/shadows.png "A raytraced scene, now with shadows")

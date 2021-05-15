@@ -10,7 +10,8 @@
 #include <rayden/WindowClosedEvent.hpp>
 #include <rayden/WindowResizedEvent.hpp>
 
-constexpr int SCR_SIZE = 512;
+constexpr int SCR_SIZE_W = 512;
+constexpr int SCR_SIZE_H = 512;
 
 using namespace rayden;
 
@@ -19,7 +20,7 @@ auto main() -> int {
 
   bool running = true;
 
-  Window window = Window(WindowProps("rayden", SCR_SIZE, SCR_SIZE));
+  Window window = Window(WindowProps("rayden", SCR_SIZE_W, SCR_SIZE_H));
   window.set_event_callback([&running](const Event &event) {
     Event::dispatch<WindowResizedEvent>(
         event, [](const WindowResizedEvent &ev) { glViewport(0, 0, ev.width(), ev.height()); });
@@ -34,9 +35,8 @@ auto main() -> int {
 
   ShaderProgram quad_shader = ShaderProgram({std::make_pair(ShaderType::Vertex, "shaders/texture.vert.glsl"),
                                              std::make_pair(ShaderType::Fragment, "shaders/texture.frag.glsl")});
-  ShaderProgram compute_shader =
-      ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/specular_reflection.cmpt.glsl")});
-  Texture2D texture = Texture2D(SCR_SIZE, SCR_SIZE);
+  ShaderProgram compute_shader = ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/shadows.cmpt.glsl")});
+  Texture2D texture = Texture2D(SCR_SIZE_W, SCR_SIZE_H);
   FullScreenQuad quad;
 
   while (running) {
