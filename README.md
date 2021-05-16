@@ -26,3 +26,7 @@ Raytracing playground based on [Computer graphics from scratch](https://gabrielg
 ![Our familiar scene, rendered with a different camera position and orientation.](img/camera_02.png "Our familiar scene, rendered with a different camera position and orientation.")
 
 ![Our familiar scene, rendered with a different camera position and orientation.](img/camera_03.png "Our familiar scene, rendered with a different camera position and orientation.")
+
+# Moving spheres
+
+![Moving spheres.](img/moving_spheres.gif "Moving spheres.")
