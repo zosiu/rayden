@@ -151,19 +151,6 @@ float light_intensity(vec3 pos, vec3 normal, vec3 view, int specular_exponent) {
   return intensity;
 }
 
-const uint MODE_CALL = 1;
-const uint MODE_RETURN = 0;
-const uint TRACE_RAY_MAX_RECURSION_LIMIT = 4;
-
-struct TraceRayData {
-  uint mode;
-  vec3 origin;
-  vec3 direction;
-  float t_min;
-  float t_max;
-  uint recursion_depth;
-};
-
 struct LocalColor {
   vec3 pos;
   vec3 normal;
@@ -177,6 +164,19 @@ LocalColor local_color(Closest closest, vec3 origin, vec3 direction) {
   vec3 color = closest_sphere.color * light_intensity(pos, normal, -direction, closest_sphere.specular_exponent);
   return LocalColor(pos, normal, color);
 };
+
+// const uint MODE_CALL = 1;
+// const uint MODE_RETURN = 0;
+// const uint TRACE_RAY_MAX_RECURSION_LIMIT = 4;
+
+// struct TraceRayData {
+//   uint mode;
+//   vec3 origin;
+//   vec3 direction;
+//   float t_min;
+//   float t_max;
+//   uint recursion_depth;
+// };
 
 // vec3 trace_ray(vec3 origin, vec3 direction, float t_min, float t_max, uint recursion_depth) {
 //   vec3 result = BACKGROUND_COLOR;

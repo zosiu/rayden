@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
 #include <rayden/FullScreenQuad.hpp>
@@ -97,8 +97,7 @@ auto main() -> int {
 
   ShaderProgram quad_shader = ShaderProgram({std::make_pair(ShaderType::Vertex, "shaders/texture.vert.glsl"),
                                              std::make_pair(ShaderType::Fragment, "shaders/texture.frag.glsl")});
-  ShaderProgram compute_shader =
-      ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/moving_spheres.cmpt.glsl")});
+  ShaderProgram compute_shader = ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/raytracing.cmpt.glsl")});
   Texture2D texture = Texture2D(SCR_SIZE_W, SCR_SIZE_H);
   FullScreenQuad quad;
 
@@ -111,7 +110,7 @@ auto main() -> int {
       compute_shader.upload_int_unifom("y_rotation", rotation_y);
       compute_shader.upload_int_unifom("z_position", position_z);
       compute_shader.upload_int_unifom("z_rotation", rotation_z);
-      compute_shader.upload_float_unifom("time", (float)glfwGetTime());
+      // compute_shader.upload_float_unifom("time", (float)glfwGetTime());
 
       glDispatchCompute(texture.width(), texture.height(), 1);
     }
