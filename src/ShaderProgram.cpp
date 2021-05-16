@@ -50,6 +50,12 @@ void ShaderProgram::bind() const { glUseProgram(_id); }
 
 void ShaderProgram::unbind() const { glUseProgram(0); }
 
+void ShaderProgram::upload_int_unifom(const std::string &name, int value) const {
+  GLint uniform_location = glGetUniformLocation(_id, name.c_str());
+  REFUTE(uniform_location == -1, "could not find uniform {}", name);
+  glUniform1i(uniform_location, value);
+}
+
 auto ShaderProgram::compile_shader(GLenum shader_type, const char *source_file) -> GLuint {
   GLuint shader = glCreateShader(shader_type);
   std::string file_contents = File::contents(source_file);

@@ -91,16 +91,16 @@ void Window::register_window_closed_callback() {
 }
 
 void Window::register_key_callback() {
-  glfwSetKeyCallback(_native_window, [](GLFWwindow *window, int key, int /* scancode */, int action, int /* mods */) {
+  glfwSetKeyCallback(_native_window, [](GLFWwindow *window, int key, int /* scancode */, int action, int mods) {
     auto handler = static_cast<WindowData *>(glfwGetWindowUserPointer(window));
     switch (action) {
     case GLFW_PRESS: {
-      KeyPressedEvent key_pressed_once(static_cast<KeyCode>(key), false);
+      KeyPressedEvent key_pressed_once(static_cast<KeyCode>(key), static_cast<KeyMod>(mods), false);
       handler->handle_event(key_pressed_once);
       break;
     }
     case GLFW_REPEAT: {
-      KeyPressedEvent key_pressed_repeatedly(static_cast<KeyCode>(key), true);
+      KeyPressedEvent key_pressed_repeatedly(static_cast<KeyCode>(key), static_cast<KeyMod>(mods), true);
       handler->handle_event(key_pressed_repeatedly);
       break;
     }

@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include <initializer_list>
+#include <string>
 #include <utility>
 
 namespace rayden {
@@ -27,6 +28,8 @@ public:
 
   void bind() const;
   void unbind() const;
+
+  void upload_int_unifom(const std::string &name, int value) const;
 
 private:
   inline auto compile_shader(GLenum shader_type, const char *source_file) -> GLuint;
