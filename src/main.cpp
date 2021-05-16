@@ -22,10 +22,8 @@ auto main() -> int {
 
   int rotation_x = 0;
   int position_x = 0;
-
   int rotation_y = 0;
   int position_y = 0;
-
   int rotation_z = 0;
   int position_z = 0;
 
@@ -98,7 +96,7 @@ auto main() -> int {
 
   ShaderProgram quad_shader = ShaderProgram({std::make_pair(ShaderType::Vertex, "shaders/texture.vert.glsl"),
                                              std::make_pair(ShaderType::Fragment, "shaders/texture.frag.glsl")});
-  ShaderProgram compute_shader = ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/camera.cmpt.glsl")});
+  ShaderProgram compute_shader = ShaderProgram({std::make_pair(ShaderType::Compute, "shaders/cleanup.cmpt.glsl")});
   Texture2D texture = Texture2D(SCR_SIZE_W, SCR_SIZE_H);
   FullScreenQuad quad;
 

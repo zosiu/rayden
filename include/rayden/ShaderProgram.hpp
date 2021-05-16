@@ -30,6 +30,7 @@ public:
   void unbind() const;
 
   void upload_int_unifom(const std::string &name, int value) const;
+  void upload_float_unifom(const std::string &name, float value) const;
 
 private:
   inline auto compile_shader(GLenum shader_type, const char *source_file) -> GLuint;
