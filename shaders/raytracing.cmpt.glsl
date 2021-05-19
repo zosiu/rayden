@@ -15,7 +15,7 @@ const float PI = 3.14159265;
 const float ROTATION_STEP = PI / 36.0;
 
 const float INF = 3.402823466e+38;
-const float EPSILON = 0.001;
+const float EPSILON = 0.05; // 0.001
 
 const uint light_type_ambient = 1;
 const uint light_type_point = 2;
@@ -31,10 +31,9 @@ struct Light {
   vec3 vector;
 };
 
-const uint NUM_OF_LIGHTS = 4;
+const uint NUM_OF_LIGHTS = 3;
 Light LIGHTS[NUM_OF_LIGHTS] = Light[NUM_OF_LIGHTS](Light(light_type_ambient, 0.1, vec3(0.0, 0.0, 0.0)),    //
-                                                   Light(light_type_point, 0.4, vec3(2.0, 1.5, 0.0)),      //
-                                                   Light(light_type_point, 0.3, vec3(-1.0, 2.0, 5.0)),     //
+                                                   Light(light_type_point, 0.6, vec3(2.0, 1.0, 0.0)),      //
                                                    Light(light_type_directional, 0.2, vec3(1.0, 4.0, 4.0)) //
 );
 
@@ -47,11 +46,11 @@ struct Sphere {
 };
 
 const uint NUM_OF_SPHERES = 4;
-Sphere SPHERES[NUM_OF_SPHERES] = Sphere[NUM_OF_SPHERES](                 //
-    Sphere(vec3(0.0, -1.0, 3.0), 1.0, vec3(1.0, 0.0, 1.0), 100, 0.2),    //
-    Sphere(vec3(-2.0, 0.0, 5.0), 1.0, vec3(0.0, 1.0, 1.0), 10, 0.1),     //
-    Sphere(vec3(2.0, 0.0, 4.0), 1.0, vec3(1.0, 1.0, 0.0), 500, 0.4),     //
-    Sphere(vec3(0.0, -5001.0, 0.0), 5000.0, vec3(1.0, 1.0, 1.0), -1, -1) //
+Sphere SPHERES[NUM_OF_SPHERES] = Sphere[NUM_OF_SPHERES](                  //
+    Sphere(vec3(0.0, -1.0, 3.0), 1.0, vec3(1.0, 0.0, 0.0), 500, 0.2),     //
+    Sphere(vec3(-2.0, 0.0, 4.0), 1.0, vec3(0.0, 1.0, 0.0), 10, 0.4),      //
+    Sphere(vec3(2.0, 0.0, 4.0), 1.0, vec3(0.0, 0.0, 1.0), 500, 0.3),      //
+    Sphere(vec3(0.0, -5001.0, 0.0), 5000.0, vec3(1.0, 1.0, 0.0), -1, 0.5) //
 );
 
 struct Closest {
@@ -165,83 +164,31 @@ LocalColor local_color(Closest closest, vec3 origin, vec3 direction) {
   return LocalColor(pos, normal, color);
 };
 
-// const uint MODE_CALL = 1;
-// const uint MODE_RETURN = 0;
-// const uint TRACE_RAY_MAX_RECURSION_LIMIT = 4;
+vec3 trace_ray(vec3 origin, vec3 direction, float t_min, float t_max) {
+  vec3 result = vec3(0.0, 0.0, 0.0);
+  float frac = 1.0;
 
-// struct TraceRayData {
-//   uint mode;
-//   vec3 origin;
-//   vec3 direction;
-//   float t_min;
-//   float t_max;
-//   uint recursion_depth;
-// };
+  while (true) {
+    Closest closest = closest_sphere(origin, direction, t_min, t_max);
+    if (closest.sphere_index == -1)
+      return result;
 
-// vec3 trace_ray(vec3 origin, vec3 direction, float t_min, float t_max, uint recursion_depth) {
-//   vec3 result = BACKGROUND_COLOR;
+    Sphere sphere = SPHERES[closest.sphere_index];
+    float reflective = max(0.0, sphere.reflective);
+    LocalColor local = local_color(closest, origin, direction);
+    result += local.color * (1 - reflective) * frac;
+    frac *= reflective;
 
-//   TraceRayData[TRACE_RAY_MAX_RECURSION_LIMIT + 1] stack;
-//   uint stack_pointer = 0;
-//   stack[stack_pointer++] = TraceRayData(MODE_CALL, origin, direction, t_min, t_max, recursion_depth);
+    if (frac < 0.001)
+      break;
 
-//   while (stack_pointer != 0) {
-//     TraceRayData data = stack[--stack_pointer];
-//     Closest closest = closest_sphere(data.origin, data.direction, data.t_min, data.t_max);
+    origin = local.pos;
+    direction = reflection(-direction, local.normal);
+    t_min = EPSILON;
+    t_max = INF;
+  }
 
-//     if (data.mode == MODE_CALL) {
-//       if (closest.sphere_index == -1) {
-//         result = BACKGROUND_COLOR;
-//       } else {
-//         LocalColor local = local_color(closest, data.origin, data.direction);
-
-//         if (SPHERES[closest.sphere_index].reflective <= 0 || data.recursion_depth <= 0) {
-//           result = local.color;
-//         } else {
-//           stack[stack_pointer++] = TraceRayData( //
-//               MODE_RETURN, data.origin, data.direction, data.t_min, data.t_max, data.recursion_depth);
-//           stack[stack_pointer++] = TraceRayData( //
-//               MODE_CALL, local.pos, reflection(-data.direction, local.normal), EPSILON, INF, data.recursion_depth -
-//               1);
-//         }
-//       }
-//     } else {
-//       float reflective = SPHERES[closest.sphere_index].reflective;
-//       result = result * reflective + local_color(closest, data.origin, data.direction).color * (1 - reflective);
-//     }
-//   }
-
-//   return result;
-// }
-
-vec3 trace_ray_r0(vec3 origin, vec3 direction, float t_min, float t_max) {
-  Closest closest = closest_sphere(origin, direction, t_min, t_max);
-  return closest.sphere_index == -1 ? BACKGROUND_COLOR : local_color(closest, origin, direction).color;
-}
-
-vec3 trace_ray_r1(vec3 origin, vec3 direction, float t_min, float t_max) {
-  Closest closest = closest_sphere(origin, direction, t_min, t_max);
-  if (closest.sphere_index == -1)
-    return BACKGROUND_COLOR;
-
-  float reflective = SPHERES[closest.sphere_index].reflective;
-  LocalColor local = local_color(closest, origin, direction);
-
-  return reflective <= 0 ? local.color
-                         : trace_ray_r0(local.pos, reflection(-direction, local.normal), EPSILON, INF) * reflective +
-                               local.color * (1 - reflective);
-}
-
-vec3 trace_ray_r2(vec3 origin, vec3 direction, float t_min, float t_max) {
-  Closest closest = closest_sphere(origin, direction, t_min, t_max);
-  if (closest.sphere_index == -1)
-    return BACKGROUND_COLOR;
-
-  float reflective = SPHERES[closest.sphere_index].reflective;
-  LocalColor local = local_color(closest, origin, direction);
-  return reflective <= 0 ? local.color
-                         : trace_ray_r1(local.pos, reflection(-direction, local.normal), EPSILON, INF) * reflective +
-                               local.color * (1 - reflective);
+  return result;
 }
 
 void main() {
@@ -257,8 +204,7 @@ void main() {
   vec3 camera_direction = rotate_x(camera_rotation.x) * rotate_y(camera_rotation.y) * rotate_z(camera_rotation.z) *
                           canvas_to_viewport(position_on_canvas, canvas_dimensions, viewport);
 
-  vec3 pixel_color_on_canvas = trace_ray_r2(camera_position, camera_direction, viewport.distance_from_camera, INF);
-  // vec3 pixel_color_on_canvas = trace_ray(camera_position, camera_direction, viewport.distance_from_camera, INF, 3);
+  vec3 pixel_color_on_canvas = trace_ray(camera_position, camera_direction, viewport.distance_from_camera, INF);
 
   imageStore(img_output, position_on_canvas, vec4(pixel_color_on_canvas, 1.0));
 }
